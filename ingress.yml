@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tapera.pemanfaatan-ingrs
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /tapera/pemanfaatan/api(/|$)(.*)
+          backend:
+            serviceName: tapera-pemanfaatan-srv
+            servicePort: 6181
