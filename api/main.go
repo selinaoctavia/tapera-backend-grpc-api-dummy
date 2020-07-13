@@ -26,6 +26,7 @@ import (
 
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
+	sbc "tapera.mitraintegrasi/grpc/client/subscriptionbri/v1"
 )
 
 // @title Tapera API
@@ -91,8 +92,16 @@ func main() {
 	// create grpc client manager
 	csbClientMgr := csbc.NewGrpcClientManager(csbGpcClientCnPool)
 
+	// create grpc connection pool
+	sbGrpcAddr := env.Str(constant.EnvGrpcServerSubscriptionBri, true, nil)
+	sbGpcClientCnPool := createGrpcClientCnPool(sbGrpcAddr)
+	defer sbGpcClientCnPool.Close()
+
+	// create grpc client manager
+	sbClientMgr := sbc.NewGrpcClientManager(sbGpcClientCnPool)
+
 	//create bri controller
-	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr)).Route(r)
+	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr, sbClientMgr)).Route(r)
 
 	// run http server
 	logger.Info().Msgf("server is listening to port %d", appConf.Port())

@@ -1,0 +1,22 @@
+syntax= "proto3";
+
+package subscriptionbri;
+
+option go_package = "v1";
+
+import "subscriptionbri_message.proto";
+
+message SubscribResponse {
+    string status = 1;
+    string response_code = 2;
+    string response_description = 3;
+  }
+  
+  message SubscribRequest {
+    SubscribData parm = 1;
+  }
+  
+  service SubscriptionBri {
+    rpc Subscription (SubscribRequest) returns (SubscribResponse){
+    }
+  }

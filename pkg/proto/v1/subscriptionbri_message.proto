@@ -1,0 +1,26 @@
+syntax= "proto3";
+
+package subscriptionbri;
+
+option go_package = "v1";
+
+message Detail {
+    string nav_date = 1;
+    string reference_no = 2;
+    string sa_code = 3;
+    string investor_fund_unit_ac_no = 4;
+    string investor_fund_unit_ac_name = 5;
+    string sid = 6;
+    string fund_code = 7;
+    string amount_nominal = 8;
+  }
+  
+  message SubscribData {
+    string payment_pool_id = 1;
+    string payment_bank_bic_code = 2;
+    string jumlah_transaksi_count = 3;
+    string total_amount_nominal = 4;
+    repeated Detail detail = 5;
+  }
+
+  

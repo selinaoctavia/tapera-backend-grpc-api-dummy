@@ -12,6 +12,8 @@ const (
 	EnvGrpcServerCancelSubscribeBri = "GRPC_SERVER_CANCEL_SUBSCRIBE_BRI"
 	// EnvGrpcServerPendaftaranPeserta const, represent Env variable of pendaftaran peserta bri grpc server
 	EnvGrpcServerPendaftaranPeserta = "GRPC_SERVER_PENDAFTARAN_PESERTA_BRI"
+	//EnvGrpcServerSubscriptionBri const, represent Env variable of subscription bri grpc server
+	EnvGrpcServerSubscriptionBri = "GRPC_SERVER_SUBSCRIPTION_BRI"
 )
 
 const (
