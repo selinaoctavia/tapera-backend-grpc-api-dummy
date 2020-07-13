@@ -1,26 +1,42 @@
 version: '3.7'
 services:
-  profiles:
-    image: mitra-integrasi
+  gcp:
+    image: 10.172.24.50:8083/integrasi-mitra-api-dummy
     build:
       context: .
       dockerfile: api.Dockerfile
-    #volumes:
-    #  - ./:/my-service-name
     ports:
-      - 4181:80
+      - 4792:8090
     environment:
       - APP_VER=1.0.0
-      - APP_NAME=mitra-integrasi
-      - APP_PORT=80
-      - COCKCROACH_DB_CONN_STR=/run/secrets/cockroach_conn_str
-    secrets:
-      - cockroach_conn_str
-
+      - APP_NAME=integrasi-mitra-api
+      - APP_PORT=8090
 secrets:
   secret-phrase:
     external: true
   secret-in-a-file:
     external: true
-  cockroach_conn_str:
-    file: ./cockroach_conn_str.txt
+
+  #ali:
+  #  image: 10.172.24.50:8082/integrasi-mitra-api
+  #  build:
+  #    context: .
+  #    dockerfile: api.Dockerfile
+  #  ports:
+  #    - 8080:80
+  #  environment:
+  #    - APP_VER=1.0.0
+  #    - APP_NAME=integrasi-mitra-api
+  #    - APP_PORT=8080
+  #    - COCKCROACH_DB_CONN_STR_AS_FILE=true 
+  #    - COCKCROACH_DB_CONN_STR=/run/secrets/ali-cockroach_conn_str
+  #  secrets:
+  #    - ali-cockroach_conn_str
+
+#secrets:
+#  secret-phrase:
+#    external: true
+#  secret-in-a-file:
+#    external: true
+  #ali_cockroach_conn_str:
+  #  file: ./ali-cockroach_conn_str.txt

@@ -1,1 +1,2 @@
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/mitraintegrasi/v1 mitraintegrasi.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pendaftaranpesertabri/v1 pendaftaranpesertabri_service.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pendaftaranpesertabri/v1 pendaftaranpesertabri_message.proto

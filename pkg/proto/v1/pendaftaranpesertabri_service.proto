@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package pendaftaranpesertabri;
+
+option go_package = "v1";
+
+import "pendaftaranpesertabri_message.proto";
+
+message PendaftaranPesertaRequest {
+    repeated PendaftaranPesertaData data = 1;
+  
+  }
+
+  message PendaftaranPesertaResponse {
+    string status = 1;
+    string message_code = 2;
+    string message_description = 3;
+    Data data = 4;
+  }
+
+  service PendaftaranPesertaBri {
+    rpc PendaftaranPeserta ( PendaftaranPesertaRequest ) returns ( stream PendaftaranPesertaResponse ) {
+    }
+  }

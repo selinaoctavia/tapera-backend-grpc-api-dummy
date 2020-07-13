@@ -1,9 +1,0 @@
-1. add tapera.mitraintegrasi/api/util/identity folder to bitbucket
-2. add tapera.mitraintegrasi/api/middleware/auth.go folder to bitbucket
-3. update tapera.mitraintegrasi/api/util/httpx/httpx.go folder to bitbucket
-4. add tapera.mitraintegrasi/util/identity folder to bitbucket
-5. update tapera.mitraintegrasi/util/constant/constant.go to bit bucket
-6. update tapera.mitraintegrasi/util/appcontext/appcontext.go to bucket
-7. dan .gitignore ditambah dua baris berikut
-	__debug_bin
-	.env

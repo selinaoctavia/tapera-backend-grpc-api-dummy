@@ -8,6 +8,10 @@ const (
 const (
 	// EnvGrpcServerMitraIntegrasi const, represent Env variable of mitra integrasi grpc server
 	EnvGrpcServerMitraIntegrasi = "GRPC_SERVER_MITRA_INTEGRASI"
+	// EnvGrpcServerCancelSubscribeBri const, represent Env variable of cancel subscribe bri grpc server
+	EnvGrpcServerCancelSubscribeBri = "GRPC_SERVER_CANCEL_SUBSCRIBE_BRI"
+	// EnvGrpcServerPendaftaranPeserta const, represent Env variable of pendaftaran peserta bri grpc server
+	EnvGrpcServerPendaftaranPeserta = "GRPC_SERVER_PENDAFTARAN_PESERTA_BRI"
 )
 
 const (

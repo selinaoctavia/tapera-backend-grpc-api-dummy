@@ -2,11 +2,12 @@
 node ('master'){
     def dockerFile = 'api.Dockerfile'
 
-    def appName = "mitra-integrasi"
+    def appName = "integrasi-mitra-api"
     def nexusPluginsRepoUrl = 'https://nexus.tapera.go.id/repository/maven-central/'
     def imageTag = 'latest'
+    def appPomVersion
 
-    def namespace = 'mitra-integrasi'
+    def namespace = 'integrasi-mitra'
     def memLimit = '512Mi'
     def cpuLimit = '500m'
     def imagePullSecret = 'nexus-dev-repo'
@@ -29,17 +30,14 @@ node ('master'){
     def katalonTestSuiteName = 'TestSuiteTapera'
     def jiraIssueKey
     def jiraUrl = 'https://jira.tapera.go.id'
-    def nexusUsername = 'nexusUsername'
-    def nexusPassword = 'nexusPassword'
+    //def nexusUsername = 'raditya.umbas'
+    //def nexusPassword = 'Ecomindo@2o2o'
     def branch = 'master'
-
-    def nexusGoCentral = 'nexus.tapera.go.id/repository/go-central'
 
     def nexusDockerDevRepoGCP = '10.172.24.50:8082'
     def nexusDockerDevRepoALI = '10.172.24.50:8082'
-
-    // ganti git url tapera
-    def gitUrl = 'https://bitbucket.tapera.go.id/scm/int/integrasi.git'
+    def gitUrl = 'https://bitbucket.tapera.go.id/scm/pmf/pmf-be.git'
+    def nexusGoCentral = 'nexus.tapera.go.id/repository/go-central'
 
     environment {
         GO111MODULE = 'on'
@@ -52,37 +50,32 @@ node ('master'){
 
     stage('Unit Test') {
         echo 'unit test'
-        //withCredentials([usernamePassword(credentialsId: 'ci-cd', passwordVariable: nexusPassword, usernameVariable: nexusUsername)]) {
-            sh """
-                go version
-                #export GOPROXY=https://${nexusUsername}:${nexusPassword}@${nexusGoCentral}
-                cd api
-                rm -rf report.xml
-                go mod tidy
+        sh """
+        go version
+        cd api
+        rm -rf report.xml
 
-                go get golang.org/x/lint/golint
-                golint ./controller/...
-                
-                #go get google.golang.org/grpc
-                #go get github.com/golang/protobuf/{proto,protoc-gen-go}
-                
-                go mod download
-                go get github.com/jstemmer/go-junit-report
-                go clean -testcache
-            """
-            
-            try {
-                sh returnStdout: true, script: '''
-                    cd api
-                    CGO_ENABLED=0 go test ./controller/... -cover -v 2>&1 | go-junit-report -set-exit-code > ./report.xml; echo $?
-                '''
+        go mod tidy
+
+        #go get -u golang.org/x/lint/golint
+        #golint ./controller/...
+        
+        #go get -u github.com/jstemmer/go-junit-report
+        go clean -testcache
+        """
+        
+        try {
+            sh returnStdout: true, script: '''
+                cd api
+                #CGO_ENABLED=0 go test ./controller/... -cover -v 2>&1 | go-junit-report -set-exit-code > ./report.xml; echo $?
+                CGO_ENABLED=0 go test ./controller/... -cover -v
+            '''
+        }
+        finally{
+            if (fileExists('./report.xml')) { 
+                junit '**/api/report.xml'
             }
-            finally{
-                if (fileExists('./report.xml')) { 
-                    junit '**/api/report.xml'
-                }
-            }     
-        //}
+        }
     }
 
     stage("SonarQube Analysis"){
@@ -101,48 +94,54 @@ node ('master'){
               }
         }
     }
-
+    
     stage('Build App'){
         echo 'build app'
-        //withCredentials([usernamePassword(credentialsId: 'ci-cd', passwordVariable: nexusPassword, usernameVariable: nexusUsername)]) {
-            sh """
-                #export GOPROXY=https://${nexusUsername}:${nexusPassword}@${nexusGoCentral}
-                cd api
-                rm -rf bin 
-                mkdir -p bin
-                CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin
-            """
-        //}
+        sh """
+            cd api
+            #rm -rf bin 
+            mkdir -p bin
+            CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin
+        """
     }
 
     stage("Security Check"){
         echo 'security check'
     }
 
-    stage('Build Image') {
+    //stage('Build Image') {
+    stage('Publish to GKE') {
         echo 'build image'
-        sh """ 
-            docker build -t ${appName}:${imageTag}  -f ${dockerFile} --build-arg APP_NAME=${appName} --build-arg APP_VER=${imageTag}  .
-        """
+        withCredentials([usernamePassword(credentialsId: 'ci-cd', passwordVariable: 'nexusPassword', usernameVariable: 'nexusUsername')]) {
+            sh """ 
+                #docker-compose build --force-rm
+                podman login -u ${nexusUsername} -p ${nexusPassword} ${nexusDockerDevRepoGCP} --tls-verify=false
+                podman build -t ${nexusDockerDevRepoGCP}/${appName}:${imageTag} -f ./api.Dockerfile . --tls-verify=false
+                podman push ${nexusDockerDevRepoGCP}/${appName}:${imageTag} --tls-verify=false
+                podman rmi ${nexusDockerDevRepoGCP}/${appName}:${imageTag} -f
+            """
+        }
     }
 
-    stage('Publish to GKE'){
+    /*stage('Publish to GKE'){
         echo 'publish to GKE'
         def nexusUrl = nexusDockerDevRepoGCP.replace("http://","")
         sh """
             docker login -u=${nexusUsername} -p=${nexusPassword} ${nexusDockerDevRepoGCP}
-            docker push ${nexusUrl}/${appName}:${imageTag} 
+            docker push ${nexusUrl}/${appName}:${imageTag}
+            docker logout ${nexusDockerDevRepoGCP} 
         """
-    }
+    }*/
 
-    stage('Publish to ALI'){
+    /*stage('Publish to ALI'){
         echo 'publish to li'
-        def nexusUrl = nexusDockerDevRepoGCP.replace("http://","")
+        def nexusUrl = nexusDockerDevRepoALI.replace("http://","")
         sh """
-            docker login -u=${nexusUsername} -p=${nexusPassword} ${nexusDockerDevRepoGCP}
+            docker login -u=${nexusUsername} -p=${nexusPassword} ${nexusDockerDevRepoALI}
             docker push ${nexusUrl}/${appName}:${imageTag} 
+            docker logout ${nexusDockerDevRepoALI}
         """
-    }
+    }*/
         
     stage('Deploy to GKE'){
         echo 'deploy to GKE'
@@ -158,10 +157,9 @@ node ('master'){
 		"""
     }
 
-    stage('Deploy to ALI'){
+   /*stage('Deploy to ALI'){
         echo 'deploy to ALI'
 
-        /*
         sh """
 		cat kubernetes/ali-deployment-template.yaml | sed 's/{APP_NAME}/${appName}/g'  \
 		| sed 's/{NEXUS_REPO}/${nexusDockerDevRepoGCP}/g' | sed 's/{IMG_TAG}/${imageTag}/g' \
@@ -176,17 +174,17 @@ node ('master'){
 		
 		kubectl --kubeconfig='${aliKubeConfig}' rollout status deployment/'${appName}' -n '${namespace}'
 		"""
-        */
-    }
+    }*/
 
-    stage("Delete Image"){
-        echo "delete image"
+    /*stage("Delete Image"){
+        echo 'delete image'
         sh """
-            docker rmi -f ${appName}:${imageTag}
+            docker-compose rm -f
         """       
-    }
+    }*/
     
     stage ("Regression Test") {
+        echo 'regresion test'
         /*
         echo "Build"
 		node ('kre-centos') {
@@ -211,7 +209,7 @@ node ('master'){
 	}
         
     stage ("Jira Update Status") {
-        echo "jira update status"
+        echo 'jira update status'
     }
 }
 

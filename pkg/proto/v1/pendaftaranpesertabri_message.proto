@@ -1,0 +1,500 @@
+syntax = "proto3";
+
+package pendaftaranpesertabri;
+
+option go_package = "v1";
+
+enum SIDGenerationStatus {
+  UNKNOWN_SID_GENERATION_STATUS = 0;
+  COMPLETED = 1;  //SID is generated
+  NA = 2;         //Irrelevant of SID generation
+  FAILED = 3;     //SID generation is failed
+}
+
+enum Identification {
+  UNKNOWN_IDENTIFICATION = 0;
+  KTP = 1;
+  PASSPORT = 2;
+}
+
+enum Gender {
+  UNKNOWN_GENDER = 0;
+  MALE = 1;
+  FEMALE = 2;
+}
+
+enum EducationalBackground {
+  UNKNOWN_EDUCATIONAL_BACKGROUND = 0;
+  PRIMARY_SCHOOL = 1;
+  JUNIOR_HIGH_SCHOOL = 2;
+  SENIOR_HIGH_SCHOOL = 3;
+  DIPLOMA = 4;
+  UNDERGRADUATE = 5;
+  POST_GRADUATE = 6;
+  DOCTORAL_PROGRAM = 7;
+  OTHER_EDUCATIONAL_BACKGROUND = 8;
+
+}
+
+enum Religion {
+  UNKNOWN_RELIGION = 0;
+  ISLAM = 1;
+  PROTESTANT = 2;
+  CATHOLIC = 3;
+  HINDUISM = 4;
+  BUDHISM = 5;
+  CONFUCIANISM = 6;
+  OTHER_RELIGION = 7;
+}
+
+enum Occupation {
+  UNKNOWN_OCCUPATION = 0;
+  STUDENT = 1;
+  HOUSEWIFE = 2;
+  ENTERPRENEUR = 3;
+  CIVIL_SERVANT = 4;
+  INDONESIA_NATIONAL_ARMED_FORCE_OR_POLICE = 5;
+  RETIREMENT = 6;
+  LECTURER_OR_TEACHER = 7;
+  PRIVATE_EMPLOYEE = 8;
+  OTHER_OCCUPATION = 9;
+}
+
+enum IncomeLevel {
+  UNKNOWN_INCOME_LEVEL = 0;
+  LESS_THAN_10_MILLION_PER_YEAR = 1;
+  BETWEEN_10_UNTIL_50_MILLION_PER_YEAR = 2;
+  BETWEEN_50_UNTIL_100_MILLION_PER_YEAR = 3;
+  BETWEEN_100_UNTIL_500_MILLION_PER_YEAR = 4;
+  BETWEEN_500_UNTIL_1_BILLION_PER_YEAR = 5;
+  MORE_THAN_1_BILLION_PER_YEAR = 6;
+}
+
+enum MaritalStatus {
+  UNKNOWN_MARITALSTATUS = 0;
+  SINGLE = 1;
+  MARRIED = 2;
+  DIVORCE = 3;
+}
+
+enum RiskProfile {
+  UNKNOWN_RISK_PROFILE = 0;
+  LOW = 1;
+  LOW_TO_MODERATE = 2;
+  MODERATE = 3;
+  MODERATE_TOHIGH = 4;
+  HIGH = 5;
+}
+
+enum InvestmentObjective {
+  UNKNOWN_INVESTMENT_OBJECTIVE = 0;
+  GAIN_FORM_PRICE_MARGIN = 1;
+  INVESTMENT = 2;
+  SPECULATION = 3;
+  OBTAIN_THE_REVENUE = 4;
+  OTHER_INVESTMENT_OBJECTIVE = 5;
+}
+
+enum SourceOfFund {
+  UNKNOWN_SOURCE_OF_FUND = 0;
+  REVENUE = 1;
+  BUSINESS_PROFIT = 2;
+  SAVING_INTEREST = 3;
+  LEGACY = 4;
+  FUND_FROM_PARENTS_OR_CHILDREN = 5;
+  GRANT = 6;
+  FUND_FROM_HUSBAND_OR_WIFE = 7;
+  DRAWING = 8;
+  INVESTMENT_GAIN = 9;
+  OTHER_SOURCE_OF_FUND = 10;
+}
+
+enum AssetOwner {
+  UNKNOWN_ASSET_OWNER = 0;
+  MYSELF = 1;
+  REPRESENTING_OTHER_PARTY = 2;
+}
+
+enum StatementType {
+  UNKNOWN_STATEMENT_TYPE = 0;
+  HARDCOPY = 1;
+  ESTATEMENT = 2;
+}
+
+enum Fatca {
+  UNKNOWN_FATCHA = 0;
+  US_PERSON = 1;
+  NON_US_PERSON = 2;
+  RECALCITRANT_ACCOUNT_HOLDER_WITH_US_INDICIA = 3;
+  RECALCITRANT_ACCOUNT_HOLDER_WITHOUT_US_INDICIA = 4;
+  DORMANT_ACCOUNT = 5;
+}
+
+enum Type {
+  UNKNOWN_TYPE = 0;
+  INPUT = 1;
+  AMENDMENT = 2;
+}
+
+enum InvestorType {
+  UNKNOWN_INVESTOR_TYPE = 0;
+  INDIVIDUAL = 1;
+  INSTITUTIONAL = 2;
+}
+
+//message data for service Pendaftaran Peserta Request
+message PendaftaranPesertaData {
+    //Processing date (Mandatory) : tanggal data nasabah sukses diproses di S-INVEST
+    //Format : yyyymmdd
+    //Example : "20201231"
+    string processing_date = 1;
+
+    //Processing time (Mandatory) : waktu/jam data nasabah sukses diproses di S-INVEST
+    //Format : hhmiss 
+    //Example : "154520"
+    string processing_time = 2;
+
+    //SA Code (Mandatory) : kode BP TAPERA
+    //Format : char(5)
+    //Example : "DBSI1"
+    string sa_code = 3;
+
+    //SID (Mandatory) : SID peserta
+    //Format : char(15)
+    //Example : "GBU114"
+    string sid = 4;
+
+    //SID Generation Status (Mandatory)
+    SIDGenerationStatus sid_generation_status = 5;
+
+    //New SID : Indicated only when the SID is changed due to amendment
+    //Format : char(15)
+    //Example : "GBU115"
+    string new_sid = 6;
+
+    //First Name (Mandatory)
+    //Format : char(100)
+    //Example : "NASABAHFRIST"
+    string first_name = 7;
+
+    //Format : char(30)
+    //Example : "NASABAHMIDDLE"
+    string middle_name = 8;
+
+    //Format : char(30)
+    //Example : "NASABAHLAST"
+    string last_name = 9;
+
+    //Country of Nationality : ISO Country Code
+    //Format : alphabet(2)
+    //Example : "ID"
+    string nationality = 10;
+
+    Identification identification = 11;
+
+    //ID No : Nomor identitas
+    //Format : char(20)
+    //Example : "1774647877"
+    string id_no = 12;
+
+    //ID Expiration Date
+    //Format : yyyymmdd
+    //Example : "20201231"
+    string id_exp_date = 13;
+
+    //Format : number(15)
+    //Example : "1774647877"
+    string npwp_no = 14;
+    
+    //NPWP Registration Date
+    //Format : yyyymmdd
+    //Example : "20201231"
+    string npwp_date = 15;
+
+    //Country of Birth : ISO Country Code
+    //Format : alphabet(2)
+    //Example : "ID"
+    string birth_country =16;
+
+    //Place of Birth
+    //Format : char(100)
+    //Example : "SIGUMPAR"
+    string birth_place = 17;
+
+    //Date of Birth
+    //Format : yyyymmdd
+    //Example : "19880101"
+    string birth_date = 18;
+
+    Gender gender = 19;
+
+    EducationalBackground education_background = 20;
+
+    //Mother's Maiden Name
+    //Format : char(100)
+    //Example : "MOTHERNAME"
+    string mother_name = 21;
+
+    Religion religion = 22;
+
+    Occupation occupation = 23;
+
+    IncomeLevel income_level = 24;
+
+    MaritalStatus marital_status = 25;
+
+    //Format : char(100)
+    //Example : "GBU NASABAH SATU"
+    string spouse_name = 26;
+
+    //Investor's Risk Profile
+    RiskProfile risk_profile = 27;
+
+    InvestmentObjective investment_objective = 28;
+    
+    SourceOfFund source_of_fund = 29;
+    
+    AssetOwner asset_owner = 30;
+
+    //Format : char(100)
+    //Example : "CIKOKO"
+    string ktp_address = 31;
+
+    //Format : number(4)
+    //Example : "3171"
+    string ktp_city_code = 32;
+
+    //Format : number(5)
+    //Example : "12345"
+    string ktp_postal = 33;
+
+    //Correspondence Address
+    //Format : char(100)
+    //Example : "TEBET"
+    string corr_address = 34;
+
+    //Correspondence City Code
+    //Format : number(4)
+    //Example : "3171"
+    string corr_city_code = 35;
+
+    //Correspondence City Name
+    //Format : char(100)
+    //Example : "JAKARTA SELATAN"
+    string corr_city_name = 36;
+
+    //Correspondence Postal Code
+    //Format : number(5)
+    //Example : "12345"
+    string corr_postal = 37;
+
+    //Country of Correspondence : ISO Country Code
+    //Format : alphabet(2)
+    //Example : "ID"
+    string corr_country = 38;
+
+    //Domicile Address
+    //Format : char(100)
+    //Example : "TEBET"
+    string dom_address = 39;
+
+    //Domicile City Code
+    //Format : number(4)
+    //Example : "3171"
+    string dom_city_code = 40;
+
+    //Domicile City Name
+    //Format : char(100)
+    //Example : "JAKARTA SELATAN"
+    string dom_city_name = 41;
+
+    //Domicile Postal Code
+    //Format : number(5)
+    //Example : "12345
+    string dom_postal = 42;
+
+    //Country of Domicile
+    //Format : alphabet(2)
+    //Example : "ID"
+    string dom_country = 43;
+
+    //Format : char(30)
+    //Example : "65446679"
+    string home_phone = 44;
+
+    //Format : char(30)
+    //Example : "08111111111"
+    string mobile_phone = 45;
+
+    //Format : char(30)
+    //Example : "775890"
+    string facsimile = 46;
+
+    //Format : char(256)
+    //Example : "kame@gmail.com"
+    string email = 47;
+
+    StatementType statement_type = 48;
+
+    Fatca fatca = 49;
+
+    //TIN or Foreign TIN
+    //Format : char(30)
+    //Example : "123456789012345678901234567890"
+    string tin = 50;
+
+    //TIN or Foreign TIN Issuance Country : ISO Country Code
+    //Format : alphabet(2)
+    //Example : "ID"
+    string tin_country = 51;
+
+    //Format : char(30)
+    //Example : "123456789012345678901234567890"
+    string external_cif_no = 52;
+
+    Type type = 53;
+
+    InvestorType investor_type = 54;
+
+    //REDM Payment Bank BIC Code 1
+    //Format : char(11)
+    //Example : "BIC001"
+    string red_pay_bank_bic_1 = 55;
+
+    //REDM Payment Bank BI Member Code 1
+    //Format : char(17)
+    //Example : "MC001"
+    string red_pay_bank_bi_1 = 56;
+
+    //REDM Payment Bank Name 1
+    //Format : char(100)
+    //Example : "MAYBANK"
+    string red_pay_bank_name_1 = 57;
+
+    //REDM Payment Bank Country 1
+    //Format : alphabet(2)
+    //Example : "ID"
+    string red_pay_bank_country_1 = 58;
+
+    //REDM Payment Bank Branch 1
+    //Format : char(20)
+    //Example : "THAMRIN"
+    string red_pay_bank_branch_1 = 59;
+
+    //REDM Payment A/C CCY 1
+    //Format : IDR/USD/EUR
+    //Example : "IDR"
+    string red_pay_bank_acc_ccy_1 = 60;
+
+    //REDM Payment A/C No. 1
+    //Format : char(30)
+    //Example : "1234567"
+    string REDM_Payment_ACNo_1 = 61;
+
+    //REDM Payment A/C Name 1
+    //Format : char(100)
+    //Example : "GBU NASABAH DUA BANK SATU"
+    string red_pay_bank_acc_name_1 = 62;
+
+    //REDM Payment Bank BIC Code 2
+    //Format : char(11)
+    //Example : "BIC002"
+    string red_pay_bank_bic_2 = 63;
+
+    //REDM Payment Bank BI Member Code 2
+    //Format : char(17)
+    //Example : "MC02"
+    string red_pay_bank_bi_2 = 64;
+
+    //REDM Payment Bank Name 2
+    //Format : char(100)
+    //Example : "BANK RAKYAT INDONESIA"
+    string red_pay_bank_name_2 = 65;
+
+    //REDM Payment Bank Country 2
+    //Format : alphabet(2)
+    //Example : "ID"
+    string red_pay_bank_country_2 = 66;
+
+    //REDM Payment Bank Branch 2
+    //Format : char(20)
+    //Example : "THAMRIN"
+    string red_pay_bank_branch_2 = 67;
+
+    //REDM Payment A/C CCY 2
+    //Format : IDR/USD/EUR
+    //Example : "USD"
+    string red_pay_bank_acc_ccy_2 = 68;
+
+    //REDM Payment A/C No. 2
+    //Format : char(30)
+    //Example : "2345678"
+    string red_pay_bank_acc_no_2 = 69;
+
+    //REDM Payment A/C Name 2
+    //Format : char(100)
+    //Example : "GBU NASABAH DUA BANK DUA"
+    string red_pay_bank_acc_name_2 = 70;
+
+    //REDM Payment Bank BIC Code 3
+    //Format : char(11)
+    //Example : "BIC003"
+    string red_pay_bank_bic_3 = 71;
+
+    //REDM Payment Bank BI Member Code 4
+    //Format : char(17)
+    //Example : "MC03"
+    string red_pay_bank_bi_3 = 72;
+
+    //REDM Payment Bank Name 3
+    //Format : char(100)
+    //Example : "BANK RAKYAT INDONESIA"
+    string red_pay_bank_name_3 = 73;
+
+    //REDM Payment Bank Country 3
+    //Format : alphabet(2)
+    //Example : "ID"
+    string red_pay_bank_country_3 = 74;
+
+    //REDM Payment Bank Branch 3
+    //Format : char(20)
+    //Example : "THAMRIN"
+    string red_pay_bank_branch_3 = 75;
+
+    //REDM Payment A/C CCY 3
+    //Format : IDR/USD/EUR
+    //Example : "USD"
+    string red_pay_bank_acc_ccy_3 = 76;
+
+    //REDM Payment A/C No. 3
+    //Format : char(30)
+    //Example : "3456789"
+    string red_pay_bank_acc_no_3 = 77;
+
+    //REDM Payment A/C Name 3
+    //Format : char(100)
+    //Example : "GBU NASABAH DUA BANK TIGA"
+    string red_pay_bank_acc_name_3 = 78;
+
+    //Format : char(6)
+    //Example : "CL003"
+    string client_code = 79;
+
+    //Investor Fund Unit A/C No. (Mandatory)
+    //Format : char(16)
+    //Example : "CL014"
+    string investor_fund_unit_ac_no = 80;
+
+    //Investor Number (Mandatory)
+    //Format : number(11)
+    //Example : "81020710014"
+    string investor_number = 81;
+  }
+
+  //message data for service Pendaftaran Peserta Response
+  message Data {
+    //SID : SID peserta based on request data
+    //Format : char(15)
+    //Example : "GBU114"
+    string sid = 1;
+  }

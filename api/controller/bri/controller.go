@@ -20,5 +20,6 @@ func (c *Controller) Route(r *mux.Router) {
 	//routes grouping
 	s := r.PathPrefix("/dummy/bri").Subrouter()
 	s.HandleFunc("/pendaftaranpeserta", c.PendaftaranPeserta).Methods("POST")
+	s.HandleFunc("/cancelsubscribe", c.CancelSubscribe).Methods("POST")
 	s.HandleFunc("/test", c.Test).Methods("GET")
 }

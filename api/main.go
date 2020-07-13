@@ -24,7 +24,8 @@ import (
 	"tapera/util"
 	"tapera/util/env"
 
-	mic "tapera.mitraintegrasi/grpc/client/mitraintegrasi/v1"
+	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
+	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
 )
 
 // @title Tapera API
@@ -75,15 +76,23 @@ func main() {
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
 	// create grpc connection pool
-	miGrpcAddr := env.Str(constant.EnvGrpcServerMitraIntegrasi, true, nil)
-	grpcClientCnPool := createGrpcClientCnPool(miGrpcAddr)
-	defer grpcClientCnPool.Close()
+	ppbGrpcAddr := env.Str(constant.EnvGrpcServerPendaftaranPeserta, true, nil)
+	ppbGrpcClientCnPool := createGrpcClientCnPool(ppbGrpcAddr)
+	defer ppbGrpcClientCnPool.Close()
 
 	// create grpc client manager
-	miClientMgr := mic.NewGrpcClientManager(grpcClientCnPool)
+	ppbClientMgr := ppbc.NewGrpcClientManager(ppbGrpcClientCnPool)
+
+	// create grpc connection pool
+	csbGrpcAddr := env.Str(constant.EnvGrpcServerCancelSubscribeBri, true, nil)
+	csbGpcClientCnPool := createGrpcClientCnPool(csbGrpcAddr)
+	defer csbGpcClientCnPool.Close()
+
+	// create grpc client manager
+	csbClientMgr := csbc.NewGrpcClientManager(csbGpcClientCnPool)
 
 	//create bri controller
-	bri.NewController(sbri.NewService(miClientMgr)).Route(r)
+	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr)).Route(r)
 
 	// run http server
 	logger.Info().Msgf("server is listening to port %d", appConf.Port())
@@ -117,7 +126,7 @@ func createGrpcClientCnPool(addr string) *pool.Pool {
 	}
 
 	gpool, err := pool.New(func() (*grpc.ClientConn, error) {
-		return grpc.Dial(addr, grpc.WithInsecure())
+		return grpc.Dial(addr, grpc.WithInsecure(), grpc.WithBlock())
 	}, maxIddleCn, maxCn, time.Duration(idleTimeOut)*time.Second)
 
 	if err != nil {

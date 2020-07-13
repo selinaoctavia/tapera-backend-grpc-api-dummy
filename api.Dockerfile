@@ -1,14 +1,15 @@
 FROM golang:1.14-alpine AS build
 
-ARG APP_NAME
-ARG APP_VER
+ARG APP_NAME=integrasi-mitra-api-dummy
+ARG APP_VER=1.0.0
 
 ENV GO111MODULE=auto
 ENV APP_NAME=$APP_NAME
 ENV APP_VER=$APP_VER
-ENV APP_PORT=80
+ENV APP_PORT=8090
 ENV APP_MODE=release
-ENV COCKCROACH_DB_CONN_STR=postgresql://root@localhost:26257/postgress?sslmode=disable
+ENV GRPC_SERVER_MITRA_INTEGRASI=localhost:50053
+ENV GRPC_SERVER_CANCEL_SUBSCRIBE_BRI=localhost:50052
 
 WORKDIR /app/api
 COPY ./api/bin/. .

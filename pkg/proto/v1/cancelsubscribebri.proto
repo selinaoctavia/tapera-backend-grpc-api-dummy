@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package cancelsubscribebri;
+
+import "google/api/annotations.proto";
+
+import "google/protobuf/descriptor.proto";
+
+import "google/protobuf/empty.proto";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "v1";
+
+message Msg {
+}
+
+message HttpxError {
+  uint32 code = 1;
+
+  string err_id = 2;
+
+  Msg msg = 3;
+}
+
+
+message CancelSubscribeRequest {
+  string payment_pool_id = 1;
+
+}
+
+
+message CancelSubscribeResponse {
+  string status = 1;
+  string message_code = 2;
+  string message_description = 3;
+  Data data = 4;
+}
+
+message Data {
+  string payment_pool_id = 1;
+}
+
+service CancelSubscribeBri {
+
+  rpc CancelSubscribe ( CancelSubscribeRequest ) returns ( CancelSubscribeResponse ) {
+  }
+
+}
+

@@ -27,3 +27,4 @@ logs/
 __debug_bin
 report.xml
 cover.out
+bin/
