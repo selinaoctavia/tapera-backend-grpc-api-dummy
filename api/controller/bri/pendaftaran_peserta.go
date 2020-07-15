@@ -21,9 +21,14 @@ func (c *Controller) PendaftaranPeserta(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	var result *bri.PendaftaranPesertaResponse
+	// var result *bri.PendaftaranPesertaResponse
 
-	result, _ = c.srv.PendaftaranPeserta(r.Context(), &param)
+	result, er := c.srv.PendaftaranPeserta(r.Context(), &param)
+
+	if er != nil {
+		ext.JSONerr(http.StatusBadRequest, er.Error())
+		return
+	}
 
 	ext.JSON(http.StatusOK, result)
 }

@@ -3,6 +3,7 @@ package bri
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"os"
@@ -17,6 +18,9 @@ const javascriptISOString = "2006-01-02T150405"
 
 // PendaftaranPeserta func for pendaftaran peserta to bri
 func (s *service) PendaftaranPeserta(ctx context.Context, parm *PendaftaranPesertaParam) (*PendaftaranPesertaResponse, error) {
+	if parm.Data == nil {
+		return nil, errors.New("Data nil")
+	}
 	logger := appcontext.Logger(ctx)
 	var response *PendaftaranPesertaResponse = new(PendaftaranPesertaResponse)
 	logger.Debug().Msg("Start PendaftaranPeserta")
@@ -119,19 +123,263 @@ func (s *service) PendaftaranPeserta(ctx context.Context, parm *PendaftaranPeser
 	// }
 
 	var datas []*ppbc.PendaftaranPesertaData
+	var sidGenerationStatus ppbc.SIDGenerationStatus
+	var identification ppbc.Identification
+	var gender ppbc.Gender
+	var educationBackground ppbc.EducationalBackground
+	var religion ppbc.Religion
+	var occupation ppbc.Occupation
+	var incomeLevel ppbc.IncomeLevel
+	var maritalStatus ppbc.MaritalStatus
+	var riskProfile ppbc.RiskProfile
+	var investmentObjective ppbc.InvestmentObjective
+	var sourceOfFund ppbc.SourceOfFund
+	var assetOwner ppbc.AssetOwner
+	var statementType ppbc.StatementType
+	var fatca ppbc.Fatca
+	var typeValue ppbc.Type
+	var investorType ppbc.InvestorType
+
 	for i := 0; i < len(parm.Data); i++ {
+
+		switch parm.Data[i].SidGenerationStatus {
+		case "1":
+			sidGenerationStatus = ppbc.SIDGenerationStatus_COMPLETED
+		case "2":
+			sidGenerationStatus = ppbc.SIDGenerationStatus_NA
+		case "3":
+			sidGenerationStatus = ppbc.SIDGenerationStatus_FAILED
+		default:
+			sidGenerationStatus = ppbc.SIDGenerationStatus_UNKNOWN_SID_GENERATION_STATUS
+		}
+
+		switch parm.Data[i].Identification {
+		case "1":
+			identification = ppbc.Identification_KTP
+		case "2":
+			identification = ppbc.Identification_PASSPORT
+		default:
+			identification = ppbc.Identification_UNKNOWN_IDENTIFICATION
+		}
+
+		switch parm.Data[i].Gender {
+		case "1":
+			gender = ppbc.Gender_MALE
+		case "2":
+			gender = ppbc.Gender_FEMALE
+		default:
+			gender = ppbc.Gender_UNKNOWN_GENDER
+		}
+
+		switch parm.Data[i].EducationBackground {
+		case "1":
+			educationBackground = ppbc.EducationalBackground_PRIMARY_SCHOOL
+		case "2":
+			educationBackground = ppbc.EducationalBackground_JUNIOR_HIGH_SCHOOL
+		case "3":
+			educationBackground = ppbc.EducationalBackground_SENIOR_HIGH_SCHOOL
+		case "4":
+			educationBackground = ppbc.EducationalBackground_DIPLOMA
+		case "5":
+			educationBackground = ppbc.EducationalBackground_UNDERGRADUATE
+		case "6":
+			educationBackground = ppbc.EducationalBackground_POST_GRADUATE
+		case "7":
+			educationBackground = ppbc.EducationalBackground_DOCTORAL_PROGRAM
+		case "8":
+			educationBackground = ppbc.EducationalBackground_OTHER_EDUCATIONAL_BACKGROUND
+		default:
+			educationBackground = ppbc.EducationalBackground_UNKNOWN_EDUCATIONAL_BACKGROUND
+		}
+
+		switch parm.Data[i].Religion {
+		case "1":
+			religion = ppbc.Religion_ISLAM
+		case "2":
+			religion = ppbc.Religion_PROTESTANT
+		case "3":
+			religion = ppbc.Religion_CATHOLIC
+		case "4":
+			religion = ppbc.Religion_HINDUISM
+		case "5":
+			religion = ppbc.Religion_BUDHISM
+		case "6":
+			religion = ppbc.Religion_CONFUCIANISM
+		case "7":
+			religion = ppbc.Religion_OTHER_RELIGION
+		default:
+			religion = ppbc.Religion_UNKNOWN_RELIGION
+		}
+
+		switch parm.Data[i].Occupation {
+		case "1":
+			occupation = ppbc.Occupation_STUDENT
+		case "2":
+			occupation = ppbc.Occupation_HOUSEWIFE
+		case "3":
+			occupation = ppbc.Occupation_ENTERPRENEUR
+		case "4":
+			occupation = ppbc.Occupation_CIVIL_SERVANT
+		case "5":
+			occupation = ppbc.Occupation_INDONESIA_NATIONAL_ARMED_FORCE_OR_POLICE
+		case "6":
+			occupation = ppbc.Occupation_RETIREMENT
+		case "7":
+			occupation = ppbc.Occupation_LECTURER_OR_TEACHER
+		case "8":
+			occupation = ppbc.Occupation_PRIVATE_EMPLOYEE
+		case "9":
+			occupation = ppbc.Occupation_OTHER_OCCUPATION
+		default:
+			occupation = ppbc.Occupation_UNKNOWN_OCCUPATION
+		}
+
+		switch parm.Data[i].IncomeLevel {
+		case "1":
+			incomeLevel = ppbc.IncomeLevel_LESS_THAN_10_MILLION_PER_YEAR
+		case "2":
+			incomeLevel = ppbc.IncomeLevel_BETWEEN_10_UNTIL_50_MILLION_PER_YEAR
+		case "3":
+			incomeLevel = ppbc.IncomeLevel_BETWEEN_50_UNTIL_100_MILLION_PER_YEAR
+		case "4":
+			incomeLevel = ppbc.IncomeLevel_BETWEEN_100_UNTIL_500_MILLION_PER_YEAR
+		case "5":
+			incomeLevel = ppbc.IncomeLevel_BETWEEN_500_UNTIL_1_BILLION_PER_YEAR
+		case "6":
+			incomeLevel = ppbc.IncomeLevel_MORE_THAN_1_BILLION_PER_YEAR
+		default:
+			incomeLevel = ppbc.IncomeLevel_UNKNOWN_INCOME_LEVEL
+		}
+
+		switch parm.Data[i].MaritalStatus {
+		case "1":
+			maritalStatus = ppbc.MaritalStatus_SINGLE
+		case "2":
+			maritalStatus = ppbc.MaritalStatus_MARRIED
+		case "3":
+			maritalStatus = ppbc.MaritalStatus_DIVORCE
+		default:
+			maritalStatus = ppbc.MaritalStatus_UNKNOWN_MARITALSTATUS
+		}
+
+		switch parm.Data[i].RiskProfile {
+		case "1":
+			riskProfile = ppbc.RiskProfile_LOW
+		case "2":
+			riskProfile = ppbc.RiskProfile_LOW_TO_MODERATE
+		case "3":
+			riskProfile = ppbc.RiskProfile_MODERATE
+		case "4":
+			riskProfile = ppbc.RiskProfile_MODERATE_TOHIGH
+		case "5":
+			riskProfile = ppbc.RiskProfile_HIGH
+		default:
+			riskProfile = ppbc.RiskProfile_UNKNOWN_RISK_PROFILE
+		}
+
+		switch parm.Data[i].InvestmentObjective {
+		case "1":
+			investmentObjective = ppbc.InvestmentObjective_GAIN_FORM_PRICE_MARGIN
+		case "2":
+			investmentObjective = ppbc.InvestmentObjective_INVESTMENT
+		case "3":
+			investmentObjective = ppbc.InvestmentObjective_SPECULATION
+		case "4":
+			investmentObjective = ppbc.InvestmentObjective_OBTAIN_THE_REVENUE
+		case "5":
+			investmentObjective = ppbc.InvestmentObjective_OTHER_INVESTMENT_OBJECTIVE
+		default:
+			investmentObjective = ppbc.InvestmentObjective_UNKNOWN_INVESTMENT_OBJECTIVE
+		}
+
+		switch parm.Data[i].SourceOfFund {
+		case "1":
+			sourceOfFund = ppbc.SourceOfFund_REVENUE
+		case "2":
+			sourceOfFund = ppbc.SourceOfFund_BUSINESS_PROFIT
+		case "3":
+			sourceOfFund = ppbc.SourceOfFund_SAVING_INTEREST
+		case "4":
+			sourceOfFund = ppbc.SourceOfFund_LEGACY
+		case "5":
+			sourceOfFund = ppbc.SourceOfFund_FUND_FROM_PARENTS_OR_CHILDREN
+		case "6":
+			sourceOfFund = ppbc.SourceOfFund_GRANT
+		case "7":
+			sourceOfFund = ppbc.SourceOfFund_FUND_FROM_HUSBAND_OR_WIFE
+		case "8":
+			sourceOfFund = ppbc.SourceOfFund_DRAWING
+		case "9":
+			sourceOfFund = ppbc.SourceOfFund_INVESTMENT_GAIN
+		case "10":
+			sourceOfFund = ppbc.SourceOfFund_OTHER_SOURCE_OF_FUND
+		default:
+			sourceOfFund = ppbc.SourceOfFund_UNKNOWN_SOURCE_OF_FUND
+		}
+
+		switch parm.Data[i].AssetOwner {
+		case "1":
+			assetOwner = ppbc.AssetOwner_MYSELF
+		case "2":
+			assetOwner = ppbc.AssetOwner_REPRESENTING_OTHER_PARTY
+		default:
+			assetOwner = ppbc.AssetOwner_UNKNOWN_ASSET_OWNER
+		}
+
+		switch parm.Data[i].StatementType {
+		case "1":
+			statementType = ppbc.StatementType_HARDCOPY
+		case "2":
+			statementType = ppbc.StatementType_ESTATEMENT
+		default:
+			statementType = ppbc.StatementType_UNKNOWN_STATEMENT_TYPE
+		}
+
+		switch parm.Data[i].Fatca {
+		case "1":
+			fatca = ppbc.Fatca_US_PERSON
+		case "2":
+			fatca = ppbc.Fatca_NON_US_PERSON
+		case "3":
+			fatca = ppbc.Fatca_RECALCITRANT_ACCOUNT_HOLDER_WITH_US_INDICIA
+		case "4":
+			fatca = ppbc.Fatca_RECALCITRANT_ACCOUNT_HOLDER_WITHOUT_US_INDICIA
+		case "5":
+			fatca = ppbc.Fatca_DORMANT_ACCOUNT
+		default:
+			fatca = ppbc.Fatca_UNKNOWN_FATCHA
+		}
+
+		switch parm.Data[i].Type {
+		case "1":
+			typeValue = ppbc.Type_INPUT
+		case "2":
+			typeValue = ppbc.Type_AMENDMENT
+		default:
+			typeValue = ppbc.Type_UNKNOWN_TYPE
+		}
+
+		switch parm.Data[i].InvestorType {
+		case "1":
+			investorType = ppbc.InvestorType_INDIVIDUAL
+		case "2":
+			investorType = ppbc.InvestorType_INSTITUTIONAL
+		default:
+			investorType = ppbc.InvestorType_UNKNOWN_INVESTOR_TYPE
+		}
+
 		data := &ppbc.PendaftaranPesertaData{
 			ProcessingDate:       parm.Data[i].ProcessingDate,
 			ProcessingTime:       parm.Data[i].ProcessingTime,
 			Sid:                  parm.Data[i].Sid,
 			SaCode:               parm.Data[i].SaCode,
-			SidGenerationStatus:  parm.Data[i].SidGenerationStatus,
+			SidGenerationStatus:  sidGenerationStatus,
 			NewSid:               parm.Data[i].NewSid,
 			FirstName:            parm.Data[i].FirstName,
 			MiddleName:           parm.Data[i].MiddleName,
 			LastName:             parm.Data[i].LastName,
 			Nationality:          parm.Data[i].Nationality,
-			Identification:       parm.Data[i].Identification,
+			Identification:       identification,
 			IdNo:                 parm.Data[i].IDNo,
 			IdExpDate:            parm.Data[i].IDExpDate,
 			NpwpNo:               parm.Data[i].NpwpNo,
@@ -139,18 +387,18 @@ func (s *service) PendaftaranPeserta(ctx context.Context, parm *PendaftaranPeser
 			BirthCountry:         parm.Data[i].BirthCountry,
 			BirthPlace:           parm.Data[i].BirthPlace,
 			BirthDate:            parm.Data[i].BirthDate,
-			Gender:               parm.Data[i].Gender,
-			EducationBackground:  parm.Data[i].EducationBackground,
+			Gender:               gender,
+			EducationBackground:  educationBackground,
 			MotherName:           parm.Data[i].MotherName,
-			Religion:             parm.Data[i].Religion,
-			Occupation:           parm.Data[i].Occupation,
-			IncomeLevel:          parm.Data[i].IncomeLevel,
-			MaritalStatus:        parm.Data[i].MaritalStatus,
+			Religion:             religion,
+			Occupation:           occupation,
+			IncomeLevel:          incomeLevel,
+			MaritalStatus:        maritalStatus,
 			SpouseName:           parm.Data[i].SpouseName,
-			RiskProfile:          parm.Data[i].RiskProfile,
-			InvestmentObjective:  parm.Data[i].InvestmentObjective,
-			SourceOfFund:         parm.Data[i].SourceOfFund,
-			AssetOwner:           parm.Data[i].AssetOwner,
+			RiskProfile:          riskProfile,
+			InvestmentObjective:  investmentObjective,
+			SourceOfFund:         sourceOfFund,
+			AssetOwner:           assetOwner,
 			KtpAddress:           parm.Data[i].KtpAddress,
 			KtpCityCode:          parm.Data[i].KtpCityCode,
 			KtpPostal:            parm.Data[i].KtpPostal,
@@ -168,13 +416,13 @@ func (s *service) PendaftaranPeserta(ctx context.Context, parm *PendaftaranPeser
 			MobilePhone:          parm.Data[i].MobilePhone,
 			Facsimile:            parm.Data[i].Facsimile,
 			Email:                parm.Data[i].Email,
-			StatementType:        parm.Data[i].StatementType,
-			Fatca:                parm.Data[i].Fatca,
+			StatementType:        statementType,
+			Fatca:                fatca,
 			Tin:                  parm.Data[i].Tin,
 			TinCountry:           parm.Data[i].TinCountry,
 			ExternalCifNo:        parm.Data[i].ExternalCifNo,
-			Type:                 parm.Data[i].Type,
-			InvestorType:         parm.Data[i].InvestorType,
+			Type:                 typeValue,
+			InvestorType:         investorType,
 			RedPayBankBic_1:      parm.Data[i].RedPayBankBic1,
 			RedPayBankBi_1:       parm.Data[i].RedPayBankBi1,
 			RedPayBankName_1:     parm.Data[i].RedPayBankName1,
