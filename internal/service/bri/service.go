@@ -5,6 +5,7 @@ import (
 
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
+	rbc "tapera.mitraintegrasi/grpc/client/redemptionbri/v1"
 	sbc "tapera.mitraintegrasi/grpc/client/subscriptionbri/v1"
 )
 
@@ -14,6 +15,7 @@ type (
 		PendaftaranPeserta(ctx context.Context, parm *PendaftaranPesertaParam) (*PendaftaranPesertaResponse, error)
 		CancelSubscribe(ctx context.Context, parm *CancelSubscribeParam) (*CancelSubscribeResponse, error)
 		Subscription(ctx context.Context, parm *SubscriptionParam) (*SubscriptionResponse, error)
+		Redemption(ctx context.Context, parm *RedemptionParam) (*RedemptionResponse, error)
 	}
 
 	// Service struct
@@ -21,6 +23,7 @@ type (
 		ppbClientMgr ppbc.GrpcClientManager
 		csbClientMgr csbc.GrpcClientManager
 		sbClientMgr  sbc.GrpcClientManager
+		rbClientMgr  rbc.GrpcClientManager
 	}
 
 	// PendaftaranPesertaParam struct
@@ -166,11 +169,41 @@ type (
 		ResponseStatus      string `json:"response_status"`
 		Data                string `json:"data"`
 	}
+
+	// RedemptionParam struct
+	RedemptionParam struct {
+		Data []*RedemptionData `json:"data"`
+	}
+
+	// RedemptionData struct
+	RedemptionData struct {
+		NavDate                string `json:"nav_date"`
+		ReferenceNo            string `json:"reference_no"`
+		SaCode                 string `json:"sa_code"`
+		InvestorFundUnitAcNo   string `json:"investor_fund_unit_ac_no"`
+		InvestorFundUnitAcName string `json:"investor_fund_unit_ac_name"`
+		FundCode               string `json:"fund_code"`
+	}
+
+	// RedemptionResponse struct
+	RedemptionResponse struct {
+		Status             string                 `json:"status"`
+		MessageCode        string                 `json:"message_code"`
+		MessageDescription string                 `json:"message_description"`
+		Data               RedemptionResponseData `json:"data"`
+	}
+
+	// RedemptionResponseData struct
+	RedemptionResponseData struct {
+		ReferenceNo string `json:"reference_no"`
+	}
 )
 
 // NewService func
-func NewService(ppbClientMgr ppbc.GrpcClientManager, csbClientMgr csbc.GrpcClientManager, sbClientMgr sbc.GrpcClientManager) Service {
+func NewService(ppbClientMgr ppbc.GrpcClientManager, csbClientMgr csbc.GrpcClientManager,
+	sbClientMgr sbc.GrpcClientManager, rbClientMgr rbc.GrpcClientManager) Service {
 	return &service{ppbClientMgr: ppbClientMgr,
 		csbClientMgr: csbClientMgr,
-		sbClientMgr:  sbClientMgr}
+		sbClientMgr:  sbClientMgr,
+		rbClientMgr:  rbClientMgr}
 }

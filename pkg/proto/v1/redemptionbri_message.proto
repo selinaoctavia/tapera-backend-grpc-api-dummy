@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package redemptionbri;
+
+option go_package = "v1";
+
+message RedemptionData { 
+    //NAV Date (Mandatory) : Transaction Date
+    //Format : yyyymmdd
+    //Example : "20201231"
+    string nav_date = 1;
+
+    //Reference No. (Mandatory)
+    //Format : number(16)
+    //Example : "1"
+    string reference_no = 2;
+
+    //SA Code (Mandatory) : BP Tapera Code
+    //Format : char(5)
+    //Example : "DBSI1"
+    string sa_code = 3;
+
+    //Investor Fund Unit A/C No. (Mandatory)
+    //Format : char(16) --> 5!c6!c3!c2!n
+    //Example : "IFUAGBU001"
+    string investor_fund_unit_ac_no = 4;
+
+    //Investor Fund Unit A/C Name (Mandatory)
+    //Format : char(100)
+    //Example : "IFUAGBU001 NAME"
+    string investor_fund_unit_ac_name = 5;
+
+    //Fund Code (Mandatory) : Product Code
+    //Format : char(16) --> 5!c2!c1!c6!c2!n
+    //Example : "KIDT"
+    string fund_code = 6;
+}
+
+message Data {
+    //Reference No. (Mandatory)
+    //Format : number(16)
+    //Example : "1"
+    string reference_no = 1;
+  }

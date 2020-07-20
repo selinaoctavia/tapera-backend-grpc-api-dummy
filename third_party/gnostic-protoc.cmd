@@ -1,2 +1,2 @@
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pendaftaranpesertabri/v1 pendaftaranpesertabri_service.proto
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pendaftaranpesertabri/v1 pendaftaranpesertabri_message.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/redemptionbri/v1 redemptionbri_service.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/redemptionbri/v1 redemptionbri_message.proto

@@ -22,5 +22,6 @@ func (c *Controller) Route(r *mux.Router) {
 	s.HandleFunc("/pendaftaranpeserta", c.PendaftaranPeserta).Methods("POST")
 	s.HandleFunc("/cancelsubscribe", c.CancelSubscribe).Methods("POST")
 	s.HandleFunc("/subscription", c.Subscription).Methods("POST")
+	s.HandleFunc("/redemption", c.Redemption).Methods("POST")
 	s.HandleFunc("/test", c.Test).Methods("GET")
 }

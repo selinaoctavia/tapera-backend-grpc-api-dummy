@@ -14,6 +14,8 @@ const (
 	EnvGrpcServerPendaftaranPeserta = "GRPC_SERVER_PENDAFTARAN_PESERTA_BRI"
 	//EnvGrpcServerSubscriptionBri const, represent Env variable of subscription bri grpc server
 	EnvGrpcServerSubscriptionBri = "GRPC_SERVER_SUBSCRIPTION_BRI"
+	//EnvGrpcServerRedemptionBri const, represent Env variable of redemption bri grpc server
+	EnvGrpcServerRedemptionBri = "GRPC_SERVER_REDEMPTION_BRI"
 )
 
 const (

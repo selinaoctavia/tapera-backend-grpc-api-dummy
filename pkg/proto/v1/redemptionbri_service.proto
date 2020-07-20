@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package redemptionbri;
+
+option go_package = "v1";
+
+import "redemptionbri_message.proto";
+
+//Request message for service Redemption
+message RedemptionRequest {
+  repeated RedemptionData data = 1;
+}
+
+//Response message for service Redemption 
+message RedemptionResponse {
+  //Status from API Redemption BRI per reference no
+  //Format : Success/Failed/Error
+  //Success : response from BRI --> http 200 and status true
+  //Failed : response from BRI --> http 200 and status false
+  //Error : response from BRI --> other than http 200
+  string status = 1;
+
+  //Response Code from API Redemption BRI per reference no
+  string message_code = 2;
+
+  //Response Description from API Redemption BRI per reference no
+  string message_description = 3;
+
+  //Data per per reference no
+  Data data = 4;
+}
+
+service RedemptionBri {
+
+  rpc Redemption ( RedemptionRequest ) returns ( stream RedemptionResponse ) {
+  }
+
+}
+
