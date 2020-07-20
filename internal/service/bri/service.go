@@ -3,6 +3,7 @@ package bri
 import (
 	"context"
 
+	crbc "tapera.mitraintegrasi/grpc/client/cancelredemptionbri/v1"
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
 	rbc "tapera.mitraintegrasi/grpc/client/redemptionbri/v1"
@@ -16,6 +17,7 @@ type (
 		CancelSubscribe(ctx context.Context, parm *CancelSubscribeParam) (*CancelSubscribeResponse, error)
 		Subscription(ctx context.Context, parm *SubscriptionParam) (*SubscriptionResponse, error)
 		Redemption(ctx context.Context, parm *RedemptionParam) (*RedemptionResponse, error)
+		CancelRedemption(ctx context.Context, parm *CancelRedemptionParam) (*CancelRedemptionResponse, error)
 	}
 
 	// Service struct
@@ -24,6 +26,7 @@ type (
 		csbClientMgr csbc.GrpcClientManager
 		sbClientMgr  sbc.GrpcClientManager
 		rbClientMgr  rbc.GrpcClientManager
+		crbClientMgr crbc.GrpcClientManager
 	}
 
 	// PendaftaranPesertaParam struct
@@ -197,13 +200,27 @@ type (
 	RedemptionResponseData struct {
 		ReferenceNo string `json:"reference_no"`
 	}
+
+	// CancelRedemptionParam struct
+	CancelRedemptionParam struct {
+		ReferenceNo string `json:"reference_no"`
+	}
+
+	// CancelRedemptionResponse struct
+	CancelRedemptionResponse struct {
+		Status             string                 `json:"status"`
+		MessageCode        string                 `json:"message_code"`
+		MessageDescription string                 `json:"message_description"`
+		Data               *CancelRedemptionParam `json:"data"`
+	}
 )
 
 // NewService func
 func NewService(ppbClientMgr ppbc.GrpcClientManager, csbClientMgr csbc.GrpcClientManager,
-	sbClientMgr sbc.GrpcClientManager, rbClientMgr rbc.GrpcClientManager) Service {
+	sbClientMgr sbc.GrpcClientManager, rbClientMgr rbc.GrpcClientManager, crbClientMgr crbc.GrpcClientManager) Service {
 	return &service{ppbClientMgr: ppbClientMgr,
 		csbClientMgr: csbClientMgr,
 		sbClientMgr:  sbClientMgr,
-		rbClientMgr:  rbClientMgr}
+		rbClientMgr:  rbClientMgr,
+		crbClientMgr: crbClientMgr}
 }

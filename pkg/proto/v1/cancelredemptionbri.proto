@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package cancelredemptionbri;
+
+option go_package = "v1";
+
+//Request message for service Cancel Redemption
+message CancelRedemptionRequest {
+  //Reference No.(Mandatory)
+  //Format : char(20)
+  //Example : "7"
+  string reference_no = 1;
+
+}
+
+//Response message for service Cancel Redemption 
+message CancelRedemptionResponse {
+  //Status from API Cancel Redemption BRI per reference no
+  //Format : Success/Failed/Error
+  //Success : response from BRI --> http 200 and status true
+  //Failed : response from BRI --> http 200 and status false
+  //Error : response from BRI --> other than http 200
+  string status = 1;
+
+  //Response Code from API Cancel Redemption BRI per reference no
+  string message_code = 2;
+
+  //Response Description from API Cancel Redemption BRI per reference no
+  string message_description = 3;
+
+  //Data per reference no
+  Data data = 4;
+}
+
+message Data {
+  //Reference No.(Mandatory)
+  //Format : char(20)
+  //Example : "7"
+  string reference_no = 1;
+}
+
+service CancelRedemptionBri {
+
+  rpc CancelRedemption ( CancelRedemptionRequest ) returns ( CancelRedemptionResponse ) {
+  }
+
+}
+

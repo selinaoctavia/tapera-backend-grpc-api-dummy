@@ -16,6 +16,8 @@ const (
 	EnvGrpcServerSubscriptionBri = "GRPC_SERVER_SUBSCRIPTION_BRI"
 	//EnvGrpcServerRedemptionBri const, represent Env variable of redemption bri grpc server
 	EnvGrpcServerRedemptionBri = "GRPC_SERVER_REDEMPTION_BRI"
+	//EnvGrpcServerCancelRedemptionBri const, represent Env variable of cancel redemption bri grpc server
+	EnvGrpcServerCancelRedemptionBri = "GRPC_SERVER_CANCEL_REDEMPTION_BRI"
 )
 
 const (
