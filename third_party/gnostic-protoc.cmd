@@ -1,2 +1,2 @@
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/cancelredemptionbri/v1 cancelredemptionbri.proto
-REM protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/redemptionbri/v1 redemptionbri_message.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pesertabkn/v1 pesertabkn_message.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pesertabkn/v1 pesertabkn_service.proto

@@ -15,9 +15,11 @@ import (
 	"google.golang.org/grpc/credentials"
 
 	"tapera.mitraintegrasi/api/constant"
+	"tapera.mitraintegrasi/api/controller/bkn"
 	"tapera.mitraintegrasi/api/controller/bri"
 	_ "tapera.mitraintegrasi/api/docs"
 	"tapera.mitraintegrasi/api/middleware"
+	sbkn "tapera.mitraintegrasi/service/bkn"
 	sbri "tapera.mitraintegrasi/service/bri"
 
 	"tapera/conf"
@@ -27,6 +29,7 @@ import (
 	crbc "tapera.mitraintegrasi/grpc/client/cancelredemptionbri/v1"
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
+	pbc "tapera.mitraintegrasi/grpc/client/pesertabkn/v1"
 	rbc "tapera.mitraintegrasi/grpc/client/redemptionbri/v1"
 	sbc "tapera.mitraintegrasi/grpc/client/subscriptionbri/v1"
 )
@@ -120,6 +123,17 @@ func main() {
 
 	//create bri controller
 	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr, sbClientMgr, rbClientMgr, crbClientMgr)).Route(r)
+
+	// create grpc connection pool
+	pbGrpcAddr := env.Str(constant.EnvGrpcServerPesertaBkn, true, nil)
+	pbGpcClientCnPool := createGrpcClientCnPool(pbGrpcAddr)
+	defer pbGpcClientCnPool.Close()
+
+	// create grpc client manager
+	pbClientMgr := pbc.NewGrpcClientManager(pbGpcClientCnPool)
+
+	//create bkn controller
+	bkn.NewController(sbkn.NewService(pbClientMgr)).Route(r)
 
 	// run http server
 	logger.Info().Msgf("server is listening to port %d", appConf.Port())

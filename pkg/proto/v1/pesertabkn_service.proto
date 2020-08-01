@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package pesertabkn;
+
+option go_package = "v1";
+
+import "pesertabkn_message.proto";
+
+message PesertaRequest {
+  string nip = 1;
+
+}
+
+message PesertaResponse {
+  string status = 1;
+  string message_code = 2;
+  string message_description = 3;
+  PesertaData data = 4;
+
+}
+
+service PesertaBkn {
+
+  rpc GetPeserta ( PesertaRequest ) returns ( PesertaResponse ) {
+  }
+
+}
+
