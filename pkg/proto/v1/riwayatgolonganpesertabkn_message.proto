@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package riwayatgolonganpesertabkn;
+
+option go_package = "v1";
+
+message RiwayatGolonganPesertaData {
+    string id = 1;
+    string id_pns = 2;
+    string golongan_id = 3;
+    string golongan = 4;
+    string sk_nomor = 5;
+    string sk_tanggal = 6;
+    string tmt_golongan = 7;
+    string no_pertek_bkn = 8;
+    string tgl_pertek_bkn = 9;
+    string jumlah_kredit_utama = 10;
+    string jumlah_kredit_tambahan = 11;
+    string jenis_kp_id = 12;
+    string jenis_kp_nama = 13;
+    string masa_kerja_golongan_tahun = 14;
+    string masa_kerja_golongan_bulan = 15;
+}

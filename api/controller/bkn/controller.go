@@ -20,4 +20,5 @@ func (c *Controller) Route(r *mux.Router) {
 	//routes grouping
 	s := r.PathPrefix("/dummy/bkn").Subrouter()
 	s.HandleFunc("/peserta", c.GetPeserta).Methods("POST")
+	s.HandleFunc("/riwayatgolonganpeserta", c.GetRiwayatGolonganPeserta).Methods("POST")
 }

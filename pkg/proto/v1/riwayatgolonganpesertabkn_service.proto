@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package riwayatgolonganpesertabkn;
+
+option go_package = "v1";
+
+import "riwayatgolonganpesertabkn_message.proto";
+
+message RiwayatGolonganPesertaRequest {
+  string nip = 1;
+
+}
+
+message RiwayatGolonganPesertaResponse {
+  string status = 1;
+  string message_code = 2;
+  string message_description = 3;
+  repeated RiwayatGolonganPesertaData data = 4;
+
+}
+
+service RiwayatGolonganPesertaBkn {
+
+  rpc GetRiwayatGolonganPeserta ( RiwayatGolonganPesertaRequest ) returns ( RiwayatGolonganPesertaResponse ) {
+  }
+
+}
+

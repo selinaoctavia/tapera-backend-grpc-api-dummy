@@ -31,6 +31,7 @@ import (
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
 	pbc "tapera.mitraintegrasi/grpc/client/pesertabkn/v1"
 	rbc "tapera.mitraintegrasi/grpc/client/redemptionbri/v1"
+	rgpbc "tapera.mitraintegrasi/grpc/client/riwayatgolonganpesertabkn/v1"
 	sbc "tapera.mitraintegrasi/grpc/client/subscriptionbri/v1"
 )
 
@@ -132,8 +133,16 @@ func main() {
 	// create grpc client manager
 	pbClientMgr := pbc.NewGrpcClientManager(pbGpcClientCnPool)
 
+	// create grpc connection pool
+	rgpbGrpcAddr := env.Str(constant.EnvGrpcServerRiwayatGolonganPesertaBkn, true, nil)
+	rgpbGpcClientCnPool := createGrpcClientCnPool(rgpbGrpcAddr)
+	defer rgpbGpcClientCnPool.Close()
+
+	// create grpc client manager
+	rgpbClientMgr := rgpbc.NewGrpcClientManager(rgpbGpcClientCnPool)
+
 	//create bkn controller
-	bkn.NewController(sbkn.NewService(pbClientMgr)).Route(r)
+	bkn.NewController(sbkn.NewService(pbClientMgr, rgpbClientMgr)).Route(r)
 
 	// run http server
 	logger.Info().Msgf("server is listening to port %d", appConf.Port())

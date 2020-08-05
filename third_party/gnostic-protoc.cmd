@@ -1,2 +1,2 @@
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pesertabkn/v1 pesertabkn_message.proto
-protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/pesertabkn/v1 pesertabkn_service.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/riwayatgolonganpesertabkn/v1 riwayatgolonganpesertabkn_message.proto
+protoc --proto_path=../pkg/proto/v1 --proto_path=. --go_out=plugins=grpc:../internal/grpc/client/riwayatgolonganpesertabkn/v1 riwayatgolonganpesertabkn_service.proto

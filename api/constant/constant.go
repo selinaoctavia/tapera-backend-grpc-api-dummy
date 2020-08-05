@@ -21,6 +21,8 @@ const (
 
 	//EnvGrpcServerPesertaBkn const, represent Env variable of get peserta bkn grpc server
 	EnvGrpcServerPesertaBkn = "GRPC_SERVER_PESERTA_BKN"
+	//EnvGrpcServerRiwayatGolonganPesertaBkn const, represent Env variable of get riwayat golongan peserta bkn grpc server
+	EnvGrpcServerRiwayatGolonganPesertaBkn = "GRPC_SERVER_RIWAYAT_GOLONGAN_PESERTA_BKN"
 )
 
 const (

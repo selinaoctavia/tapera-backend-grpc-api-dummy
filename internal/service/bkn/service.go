@@ -4,17 +4,20 @@ import (
 	"context"
 
 	pbc "tapera.mitraintegrasi/grpc/client/pesertabkn/v1"
+	rgpbc "tapera.mitraintegrasi/grpc/client/riwayatgolonganpesertabkn/v1"
 )
 
 type (
 	// Service interface of user service
 	Service interface {
 		GetPeserta(ctx context.Context, parm *PesertaParam) (*PesertaResponse, error)
+		GetRiwayatGolonganPeserta(ctx context.Context, parm *RiwayatGolonganPesertaParam) (*RiwayatGolonganPesertaResponse, error)
 	}
 
 	// Service struct
 	service struct {
-		pbClientMgr pbc.GrpcClientManager
+		pbClientMgr   pbc.GrpcClientManager
+		rgpbClientMgr rgpbc.GrpcClientManager
 	}
 
 	//PesertaParam struct
@@ -121,9 +124,44 @@ type (
 		MessageDescription string       `json:"message_description"`
 		Data               *PesertaData `json:"data"`
 	}
+
+	//RiwayatGolonganPesertaParam struct
+	RiwayatGolonganPesertaParam struct {
+		Nip string `json:"nip"`
+	}
+
+	// RiwayatGolonganPesertaData struct
+	RiwayatGolonganPesertaData struct {
+		ID                     string `json:"id"`
+		IDPns                  string `json:"idPns"`
+		GolonganID             string `json:"golonganId"`
+		Golongan               string `json:"golongan"`
+		SkNomor                string `json:"skNomor"`
+		SkTanggal              string `json:"skTanggal"`
+		TmtGolongan            string `json:"tmtGolongan"`
+		NoPertekBkn            string `json:"noPertekBkn"`
+		TglPertekBkn           string `json:"tglPertekBkn"`
+		JumlahKreditUtama      string `json:"jumlahKreditUtama"`
+		JumlahKreditTambahan   string `json:"jumlahKreditTambahan"`
+		JenisKPId              string `json:"jenisKPId"`
+		JenisKPNama            string `json:"jenisKPNama"`
+		MasaKerjaGolonganTahun string `json:"masaKerjaGolonganTahun"`
+		MasaKerjaGolonganBulan string `json:"masaKerjaGolonganBulan"`
+	}
+
+	// RiwayatGolonganPesertaResponse struct
+	RiwayatGolonganPesertaResponse struct {
+		Status             string                        `json:"status"`
+		MessageCode        string                        `json:"message_code"`
+		MessageDescription string                        `json:"message_description"`
+		Data               []*RiwayatGolonganPesertaData `json:"data"`
+	}
 )
 
 // NewService func
-func NewService(pbClientMgr pbc.GrpcClientManager) Service {
-	return &service{pbClientMgr: pbClientMgr}
+func NewService(pbClientMgr pbc.GrpcClientManager, rgpbClientMgr rgpbc.GrpcClientManager) Service {
+	return &service{
+		pbClientMgr:   pbClientMgr,
+		rgpbClientMgr: rgpbClientMgr,
+	}
 }
