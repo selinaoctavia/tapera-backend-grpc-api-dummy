@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package redemptionbri;
 
-option go_package = "v1";
+option go_package = "redeembri/v1";
+
+option objc_class_prefix = "redeembri";
 
 message RedemptionData { 
     //NAV Date (Mandatory) : Transaction Date
