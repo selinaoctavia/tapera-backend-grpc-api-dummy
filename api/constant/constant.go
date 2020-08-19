@@ -18,6 +18,8 @@ const (
 	EnvGrpcServerRedemptionBri = "GRPC_SERVER_REDEMPTION_BRI"
 	//EnvGrpcServerCancelRedemptionBri const, represent Env variable of cancel redemption bri grpc server
 	EnvGrpcServerCancelRedemptionBri = "GRPC_SERVER_CANCEL_REDEMPTION_BRI"
+	//EnvGrpcServerAdviceRedemptionConfirmationBri const, represent Env variable of advice redemption confirmation bri grpc server
+	EnvGrpcServerAdviceRedemptionConfirmationBri = "GRPC_SERVER_ADVICE_REDEMPTION_CONFIRMATION_BRI"
 
 	//EnvGrpcServerPesertaBkn const, represent Env variable of get peserta bkn grpc server
 	EnvGrpcServerPesertaBkn = "GRPC_SERVER_PESERTA_BKN"

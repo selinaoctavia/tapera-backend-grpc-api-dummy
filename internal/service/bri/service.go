@@ -3,6 +3,7 @@ package bri
 import (
 	"context"
 
+	arcbc "tapera.mitraintegrasi/grpc/client/adviceredemptionconfirmationbri/v1"
 	crbc "tapera.mitraintegrasi/grpc/client/cancelredemptionbri/v1"
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
@@ -18,15 +19,17 @@ type (
 		Subscription(ctx context.Context, parm *SubscriptionParam) (*SubscriptionResponse, error)
 		Redemption(ctx context.Context, parm *RedemptionParam) (*RedemptionResponse, error)
 		CancelRedemption(ctx context.Context, parm *CancelRedemptionParam) (*CancelRedemptionResponse, error)
+		AdviceRedemptionConfirmation(ctx context.Context, parm *AdviceRedemptionConfirmationParam) (*AdviceRedemptionConfirmationResponse, error)
 	}
 
 	// Service struct
 	service struct {
-		ppbClientMgr ppbc.GrpcClientManager
-		csbClientMgr csbc.GrpcClientManager
-		sbClientMgr  sbc.GrpcClientManager
-		rbClientMgr  rbc.GrpcClientManager
-		crbClientMgr crbc.GrpcClientManager
+		ppbClientMgr  ppbc.GrpcClientManager
+		csbClientMgr  csbc.GrpcClientManager
+		sbClientMgr   sbc.GrpcClientManager
+		rbClientMgr   rbc.GrpcClientManager
+		crbClientMgr  crbc.GrpcClientManager
+		arcbClientMgr arcbc.GrpcClientManager
 	}
 
 	// PendaftaranPesertaParam struct
@@ -213,14 +216,37 @@ type (
 		MessageDescription string                 `json:"message_description"`
 		Data               *CancelRedemptionParam `json:"data"`
 	}
+
+	// AdviceRedemptionConfirmationParam struct
+	AdviceRedemptionConfirmationParam struct {
+		ReferenceNo string `json:"reference_no"`
+	}
+
+	// AdviceRedemptionConfirmationResponse struct
+	AdviceRedemptionConfirmationResponse struct {
+		Status             string                           `json:"status"`
+		MessageCode        string                           `json:"message_code"`
+		MessageDescription string                           `json:"message_description"`
+		Data               AdviceRedemptionConfirmationData `json:"data"`
+	}
+
+	// AdviceRedemptionConfirmationData struct
+	AdviceRedemptionConfirmationData struct {
+		ReferenceNo string `json:"reference_no"`
+		NavDate     string `json:"nav_date"`
+		Status      string `json:"status"`
+	}
 )
 
 // NewService func
 func NewService(ppbClientMgr ppbc.GrpcClientManager, csbClientMgr csbc.GrpcClientManager,
-	sbClientMgr sbc.GrpcClientManager, rbClientMgr rbc.GrpcClientManager, crbClientMgr crbc.GrpcClientManager) Service {
-	return &service{ppbClientMgr: ppbClientMgr,
-		csbClientMgr: csbClientMgr,
-		sbClientMgr:  sbClientMgr,
-		rbClientMgr:  rbClientMgr,
-		crbClientMgr: crbClientMgr}
+	sbClientMgr sbc.GrpcClientManager, rbClientMgr rbc.GrpcClientManager, crbClientMgr crbc.GrpcClientManager,
+	arcbClientMgr arcbc.GrpcClientManager) Service {
+	return &service{
+		ppbClientMgr:  ppbClientMgr,
+		csbClientMgr:  csbClientMgr,
+		sbClientMgr:   sbClientMgr,
+		rbClientMgr:   rbClientMgr,
+		crbClientMgr:  crbClientMgr,
+		arcbClientMgr: arcbClientMgr}
 }

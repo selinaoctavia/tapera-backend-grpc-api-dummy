@@ -26,6 +26,7 @@ import (
 	"tapera/util"
 	"tapera/util/env"
 
+	arcbc "tapera.mitraintegrasi/grpc/client/adviceredemptionconfirmationbri/v1"
 	crbc "tapera.mitraintegrasi/grpc/client/cancelredemptionbri/v1"
 	csbc "tapera.mitraintegrasi/grpc/client/cancelsubscribebri/v1"
 	ppbc "tapera.mitraintegrasi/grpc/client/pendaftaranpesertabri/v1"
@@ -122,8 +123,16 @@ func main() {
 	// create grpc client manager
 	crbClientMgr := crbc.NewGrpcClientManager(crbGpcClientCnPool)
 
+	// create grpc connection pool
+	arcbGrpcAddr := env.Str(constant.EnvGrpcServerAdviceRedemptionConfirmationBri, true, nil)
+	arcbGpcClientCnPool := createGrpcClientCnPool(arcbGrpcAddr)
+	defer arcbGpcClientCnPool.Close()
+
+	// create grpc client manager
+	arcbClientMgr := arcbc.NewGrpcClientManager(arcbGpcClientCnPool)
+
 	//create bri controller
-	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr, sbClientMgr, rbClientMgr, crbClientMgr)).Route(r)
+	bri.NewController(sbri.NewService(ppbClientMgr, csbClientMgr, sbClientMgr, rbClientMgr, crbClientMgr, arcbClientMgr)).Route(r)
 
 	// create grpc connection pool
 	pbGrpcAddr := env.Str(constant.EnvGrpcServerPesertaBkn, true, nil)

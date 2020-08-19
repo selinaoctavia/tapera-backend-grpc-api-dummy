@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package AdviceRedemptionConfirmationbri;
+
+option go_package = "v1";
+
+enum Status {
+  UNKNOWN_STATUS = 0;
+  OPEN = 1;
+  REJECT = 2;
+  APPROVE = 3;
+  VALID = 4;
+  CANCEL = 5;
+  POSTED = 6;
+}
+
+//Request message for service AdviceConfirm Redemption
+message AdviceRedemptionConfirmationRequest {
+  //Reference No.(Mandatory)
+  //Format : char(20)
+  //Example : "7"
+  string reference_no = 1;
+
+}
+
+//Response message for service Advice Confirm Redemption 
+message AdviceRedemptionConfirmationResponse {
+  //Status from API Advice Confirm Redemption BRI per reference no
+  //Format : Success/Failed/Error
+  //Success : response from BRI --> http 200 and status true
+  //Failed : response from BRI --> http 200 and status false
+  //Error : response from BRI --> other than http 200
+  string status = 1;
+
+  //Response Code from API Advice Confirm Redemption BRI per reference no
+  string message_code = 2;
+
+  //Response Description from API Advice Confirm Redemption BRI per reference no
+  string message_description = 3;
+
+  //Data per reference no
+  Data data = 4;
+}
+
+message Data {
+  //Reference No.
+  //Format : char(20)
+  //Example : "7"
+  string reference_no = 1;
+
+  //NAV Date : Transaction Date
+  //Format : yyyymmdd
+  //Example : "20201231"
+  string nav_date = 2;
+
+  //Status redemption per reference no
+  Status status = 3;
+}
+
+service AdviceRedemptionConfirmationBri {
+
+  rpc AdviceRedemptionConfirmation ( AdviceRedemptionConfirmationRequest ) returns ( AdviceRedemptionConfirmationResponse ) {
+  }
+
+}
+
